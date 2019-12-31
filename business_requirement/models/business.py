@@ -12,7 +12,7 @@ class BusinessRequirement(models.Model):
     _description = "Business Requirement"
     _order = "name desc"
 
-    @api.model
+    
     def _get_default_company(self):
         if not self.env.user.company_id:
             raise ValidationError(
@@ -198,14 +198,14 @@ class BusinessRequirement(models.Model):
         required=True
     )
 
-    @api.model
+    
     def create(self, vals):
         if vals.get('name', '/') == '/':
             vals['name'] = self.env['ir.sequence'].next_by_code(
                 'business.requirement')
         return super().create(vals)
 
-    @api.multi
+    
     def write(self, vals):
         if vals.get('state'):
             user = self.env.user
@@ -237,7 +237,7 @@ class BusinessRequirement(models.Model):
                         'draft/confirmed/cancel/drop.'))
         return super().write(vals)
 
-    @api.multi
+    
     def name_get(self):
         """
         Display display [Name] Description
@@ -248,7 +248,7 @@ class BusinessRequirement(models.Model):
             result.append((br.id, formatted_name))
         return result
 
-    @api.model
+    
     def name_search(self, name, args=None, operator='ilike', limit=100):
         """Search BR based on Name or Description"""
         # Make a search with default criteria
@@ -262,7 +262,7 @@ class BusinessRequirement(models.Model):
         # Merge both results
         return list(set(names) | set(descriptions))[:limit]
 
-    @api.multi
+    
     @api.returns('mail.message', lambda value: value.id)
     def message_post(
         self, body='', subject=None,
@@ -292,7 +292,7 @@ class BusinessRequirement(models.Model):
             **kwargs)
         return message
 
-    @api.model
+   
     def read_group(self, domain, fields, groupby, offset=0,
                    limit=None, orderby=False, lazy=True):
         """Read group customization in order to display all the stages in the
@@ -340,7 +340,7 @@ class BusinessRequirement(models.Model):
         for br in self:
             br.access_url = '/my/business_requirement/%s' % br.id
 
-    @api.multi
+    
     def portal_publish_button(self):
         self.ensure_one()
         return self.write({'portal_published': not self.portal_published})
